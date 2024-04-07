@@ -15,3 +15,9 @@ This project focuses on analyzing freely accessible data from nonprofit organiza
 # Languages / Frameworks
 - Python
 - [TBD]
+
+# Important Documents:
+- [Project Word Outline](https://docs.google.com/document/d/1-J_Mb8bi-Re9P9A6yzR5AgwiS1mgR3Xx5iAZAEmUppA/edit)
+- [Powerpoint Presentation](https://docs.google.com/presentation/d/1GJJCNeAF8MyyyXG4KpU91Fhdi5Hu6YqCXd2ahDtaT4U/edit#slide=id.p)
+- [Website Example 1](https://www.guidestar.org/)
+- [API for NonProfit Info (ProPublica)](https://projects.propublica.org/nonprofits/api)
