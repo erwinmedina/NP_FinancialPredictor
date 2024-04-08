@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import requests
 import streamlit as st
@@ -6,16 +7,20 @@ import numpy as np
 import pymongo
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+from dotenv import load_dotenv
 
+load_dotenv("./.env")
+mongo_uri = os.environ.get("MONGODB_URI")
+print(mongo_uri)
 
-client = pymongo.MongoClient("mongodb+srv://erwinlmedina:TIvSHgLjsxURxrMV@cluster0.zsupnfu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+client = pymongo.MongoClient(mongo_uri)
 db = client.get_database("sample_mflix")
 collection = db.get_collection("users")
 
 data = collection.find()  # Retrieve all documents from the collection
 
 
-uri = "mongodb+srv://erwinlmedina:TIvSHgLjsxURxrMV@cluster0.zsupnfu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+uri = mongo_uri
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
 # Send a ping to confirm a successful connection
