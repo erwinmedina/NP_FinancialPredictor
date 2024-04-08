@@ -8,11 +8,11 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
 
-# client = pymongo.MongoClient("mongodb+srv://erwinlmedina:ALufXMuib82KO6cc@cluster0.zsupnfu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-# db = client.get_database("sample_mflix")
-# collection = db.get_collection("users")
+client = pymongo.MongoClient("mongodb+srv://erwinlmedina:TIvSHgLjsxURxrMV@cluster0.zsupnfu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+db = client.get_database("sample_mflix")
+collection = db.get_collection("users")
 
-# data = collection.find()  # Retrieve all documents from the collection
+data = collection.find()  # Retrieve all documents from the collection
 
 
 uri = "mongodb+srv://erwinlmedina:TIvSHgLjsxURxrMV@cluster0.zsupnfu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
@@ -63,12 +63,12 @@ def main():
 
     # st.subheader("Predicted Financial Development Over Next 5 Years")
         
-    # # Display data in Streamlit app
-    # st.title("MongoDB Data Viewer")
+    # Display data in Streamlit app
+    st.title("MongoDB Data Viewer")
 
-    # # Display each document in the collection
-    # for doc in data:
-    #     st.write(doc)
+    # Display each document in the collection
+    for doc in data:
+        st.write(doc)
 
     # Close MongoDB connection
     client.close()
