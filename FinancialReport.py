@@ -14,12 +14,20 @@ def main():
     with open("eins.json", "r") as file:
         eins = json.load(file)
     results = []
-    for ein in eins:
+    for i in range(100):
         count += 1
-        data = fetch_nonprofit_data(ein)
+        data = fetch_nonprofit_data(eins[i])
         if data:
             results.append(data)
         print(count)
+    
+
+    # for ein in eins:
+    #     count += 1
+    #     data = fetch_nonprofit_data(ein)
+    #     if data:
+    #         results.append(data)
+    #     print(count)
     with open("nonprofit_data.json", "w") as outfile:
         json.dump(results, outfile, indent=4)
     st.json(results)
