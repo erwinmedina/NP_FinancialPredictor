@@ -48,9 +48,24 @@ except Exception as e:
 #         return None
 
 def main():
-    # st.title("Nonprofit Financial Analysis")
+    st.title("Nonprofit Financial Analysis")
 
-    # st.text("Our goal is to provide publicly available financial information about nonprofit organizations and predict their success in the future.")
+    st.text("Our goal is to provide publicly available financial information about nonprofit organizations and predict their success in the future.")
+
+    # Add a search bar
+    search_term = st.text_input("Search", "")
+    # Filter data based on search term
+    filtered_data = [item for item in data if search_term.lower() in str(item).lower()]
+
+    if filtered_data:
+        st.write(filtered_data)
+    else:
+        st.warning("No matching data found.")
+
+    # Display each document in the collection
+    for doc in data:
+        st.write(doc)
+
 
     # # Fetch data from the mock API
     # data = fetch_data()
@@ -61,27 +76,19 @@ def main():
     # else:
     #     st.warning("No data available. Please check your API URL.")
 
-    # chart_data = pd.DataFrame(np.random.randn(20, 3), columns=["a", "b", "c"])
+    chart_data = pd.DataFrame(np.random.randn(20, 3), columns=["a", "b", "c"])
 
-    # st.subheader("Financial Development Over Last 5 Years")
-    # st.line_chart(chart_data)
+    st.subheader("Financial Development Over Last 5 Years")
+    st.line_chart(chart_data)
 
-    # st.subheader("Predicted Financial Development Over Next 5 Years")
-        
-    # Display data in Streamlit app
-    st.title("MongoDB Data Viewer")
-
-    # Display each document in the collection
-    for doc in data:
-        st.write(doc)
+    st.subheader("Predicted Financial Development Over Next 5 Years")
+    st.line_chart(chart_data)
 
     # Close MongoDB connection
     client.close()
 
 
 
-
-    # st.title("Postman Mock API Data Viewer")
 
     # # Fetch data from the mock API
     # data = fetch_data()
