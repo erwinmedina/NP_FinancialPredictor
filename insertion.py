@@ -9,10 +9,10 @@ print(mongo_uri)
 
 client = pymongo.MongoClient(mongo_uri)
 db = client.get_database("nonprofit")
-collection = db.get_collection("organization")
+collection = db.get_collection("organization_10k")
 
 count = 1
-with open("nonprofit_data.json", "r") as file:
+with open("nonprofit_data_10k.json", "r") as file:
     nonprofit = json.load(file)
 results = []
 
