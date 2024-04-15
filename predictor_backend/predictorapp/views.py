@@ -129,8 +129,10 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import pandas as pd
+import io
+import base64
 
-def organization_trends(request):
+def generate_graph():
     # Sample data (replace with your actual data)
     data = {
         'year': [2018, 2019, 2020, 2021],
@@ -149,9 +151,22 @@ def organization_trends(request):
     plt.title('Organization Trends')
     plt.legend()
     
-    # Save the plot to a temporary file
-    plot_path = 'media/organization_trends.png'
-    plt.savefig(plot_path)
+    # Convert the plot to a base64 string
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_base64 = base64.b64encode(buffer.getvalue()).decode()
+    plt.close()
     
-    # return render(request, 'organization_trends.html', {'plot_path': plot_path})
-    return render(request, 'index.html')
+    return image_base64
+
+def organization_trends(request):
+    # Call the function to generate the graph
+    graph_data = generate_graph()
+
+    # Pass the graph data to the template context
+    context = {
+        'graph_data': graph_data
+    }
+
+    return render(request, 'index.html', context)
