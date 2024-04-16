@@ -111,6 +111,7 @@
 
 
 
+import json
 from django.shortcuts import render
 import matplotlib
 matplotlib.use('Agg')
@@ -175,6 +176,7 @@ def organization_trends(request):
     }
 
     return render(request, 'index.html', context)
+    # return render(request, 'organization_detail.html', context)
 
 def home(request):
     return render(request, "home.html")
@@ -184,6 +186,8 @@ def organization_detail(request):
     ein = int(request.GET.get('ein'))
     if ein:
         organization = collection.find_one({'organization.ein': ein})
-        return render(request, 'organization_detail.html', {'organization': organization})
+        # Convert filings_with_data to JSON
+        filings_with_data_json = json.dumps(organization.get('filings_with_data', []))
+        return render(request, 'organization_detail.html', {'organization': organization, 'filings_with_data_json': filings_with_data_json})
     else:
         return render(request, 'organization_detail.html')
