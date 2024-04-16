@@ -111,19 +111,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 from django.shortcuts import render
 import matplotlib
 matplotlib.use('Agg')
@@ -131,6 +118,24 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import io
 import base64
+from .models import OrganizationLite
+from django.urls import reverse
+import pymongo
+from django.conf import settings
+from dotenv import load_dotenv
+import os
+
+load_dotenv("./.env")
+mongo_uri = os.environ.get("MONGODB_URI")
+print(mongo_uri)
+
+client = pymongo.MongoClient(mongo_uri)
+
+db = client.get_database("nonprofit")
+collection = db.get_collection('organization')
+
+def home(request):
+    return render(request, "home.html")
 
 def generate_graph():
     # Sample data (replace with your actual data)
@@ -170,3 +175,15 @@ def organization_trends(request):
     }
 
     return render(request, 'index.html', context)
+
+def home(request):
+    return render(request, "home.html")
+
+def organization_detail(request):
+
+    ein = int(request.GET.get('ein'))
+    if ein:
+        organization = collection.find_one({'organization.ein': ein})
+        return render(request, 'organization_detail.html', {'organization': organization})
+    else:
+        return render(request, 'organization_detail.html')

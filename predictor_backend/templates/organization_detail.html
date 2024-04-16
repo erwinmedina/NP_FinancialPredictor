@@ -1,0 +1,52 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Organization Detail</title>
+    <!-- Include any necessary scripts for your graph library -->
+</head>
+<body>
+    <h1>Organization Detail</h1>
+    {% if organization %}
+        <p>Name: {{ organization.organization.name }}</p>
+        <p>EIN: {{ organization.organization.ein }}</p>
+        <p>Address: {{ organization.organization.address}}, {{ organization.organization.city}}, {{ organization.organization.state}}, {{ organization.organization.zipcode}}</p>
+        <p>Revenue Amount: ${{ organization.organization.revenue_amount}}</p>
+        <div id="chart-container"></div> <!-- Container for your graph -->
+    {% else %}
+        <p>No organization found</p>
+    {% endif %}
+<!-- 
+    <script  type="text/javascript">
+        // Extract data from the organization object
+        var filingsWithData = "{{ organization.filings_with_data }}"
+        console.log(JSON.parse(filingsWithData))
+        var tax_prd_yr = [];
+        var totrevenue = [];
+
+        // Iterate through the filings_with_data array
+        for (var i = 0; i < filingsWithData.length; i++) {
+            tax_prd_yr.push(filingsWithData[i].tax_prd_yr);
+            totrevenue.push(filingsWithData[i].totrevenue);
+        }
+        console.log(tax_prd_yr)
+
+        // Now you can use tax_prd_yr and totrevenue to create your graph using your preferred charting library
+        // For example, using Chart.js
+        var ctx = document.getElementById('chart-container').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: tax_prd_yr,
+                datasets: [{
+                    label: 'Total Revenue',
+                    data: totrevenue,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                // Customize chart options as needed
+            }
+        });
+    </script> -->
+</body>
+</html>
