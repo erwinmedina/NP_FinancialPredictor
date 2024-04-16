@@ -1,69 +1,132 @@
+{% load static %}
+
 <html lang="en">
-<head>
-    <style>
-        h1{
-            text-align: center;
-        }
-    </style>
-    <meta charset="UTF-8">
-    <title>Organization Detail</title>
-    <!-- Include any necessary scripts for your graph library -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-    <h1>Organization Detail</h1>
-    {% if organization %}
-        <p>Name: {{ organization.organization.name }}</p>
-        <p>EIN: {{ organization.organization.ein }}</p>
-        <p>Address: {{ organization.organization.address}}, {{ organization.organization.city}}, {{ organization.organization.state}}, {{ organization.organization.zipcode}}</p>
-        <p>Revenue Amount: ${{ organization.organization.revenue_amount}}</p>
-        <div id="chart-container">
-            <canvas id="myChart"></canvas>
-        </div> <!-- Container for your graph -->
-    {% else %}
-        <p>No organization found</p>
-    {% endif %}
-
-    <!-- Add a button to navigate back to the home page -->
-    <!-- <button onclick="window.location.href = './home.html/';">Back to Home</button> -->
-    <!-- <button onclick="window.location.href = '{% url 'home' %}'">Go back to Home</button> -->
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'css/organization_detail.css' %}"/>
+        <meta charset="UTF-8">
+        <title>Organization Detail</title>
+        <!-- Include any necessary scripts for your graph library -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
 
 
-
-
-
-    <script type="text/javascript">
-        // Extract data from the organization object
-        var filingsWithData = JSON.parse("{{ filings_with_data_json|escapejs }}");
-        console.log(filingsWithData);
-        var tax_prd_yr = [];
-        var totrevenue = [];
-    
-        // Iterate through the filings_with_data array
-        for (var i = 0; i < filingsWithData.length; i++) {
-            tax_prd_yr.push(filingsWithData[i].tax_prd_yr);
-            totrevenue.push(filingsWithData[i].totrevenue);
-        }
-        console.log(tax_prd_yr);
-    
-        // Now you can use tax_prd_yr and totrevenue to create your graph using your preferred charting library
-        // For example, using Chart.js
-        var ctx = document.getElementById('myChart').getContext('2d'); // Change 'chart-container' to 'myChart'
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: tax_prd_yr,
-                datasets: [{
-                    label: 'Total Revenue',
-                    data: totrevenue,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                // Customize chart options as needed
-            }
-        });
-    </script>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>    
         
-</body>
+        <nav class="px-3 navbar navbar-dark bg-dark navbar-expand-lg">
+            <a class="navbar-brand" href="/">NP - FP</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+          
+            <div class="navItems collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>   
+                </ul>
+                <form id="searchForm" class="searchForm d-flex form-inline my-2 my-lg-0" action="{% url 'organization_detail' %}" method="GET">
+                    <input class="searchFormInput form-control mr-sm-2" type="text" id="ein" name="ein" placeholder="Search" aria-label="Search">
+                    <button class="searchFormBtn btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
+                </form>
+                <script>
+                    document.getElementById("searchForm").onsubmit = function(event) {
+                        var einValue = document.getElementById("ein").value;
+                        if (einValue.trim() === "") {
+                            // Prevent form submission if input is empty
+                            event.preventDefault();
+                            alert("Please enter an EIN");
+                        }
+                    };
+                </script>
+            </div>
+        </nav>
+
+        <div class="orgDetailHeader">
+            <h1 class="display-5">Organization Detail</h1>
+        </div>
+        
+        <div class="orgContainer d-inline-flex justify-content-center w-100">
+            {% if organization %}
+                <div class="orgInfo">
+                    <div class="orgName">
+                        <p class="orgTitle">Name:</p>
+                        <p class="orgResult">{{ organization.organization.name }}</p>
+                    </div>
+                    <div class="orgName">
+                        <p class="orgTitle">EIN:</p>
+                        <p class="orgResult">{{ organization.organization.ein }}</p>
+                    </div>
+                    <div class="orgName">
+                        <p class="orgTitle">Address:</p>
+                        <p class="orgResult">{{ organization.organization.address}}, {{ organization.organization.city}}, {{ organization.organization.state}}, {{ organization.organization.zipcode}}</p>
+                    </div>
+                </div>
+                
+                <div class="chartContainer d-flex flex-column ">
+                    <!-- Where the revenue graph is -->
+                    <div class="chart chartTotRev" id="chart-container">
+                        <canvas id="myChart"></canvas>
+                    </div> 
+
+                    <!-- Where the total expenses graph is -->
+                    <div class="chart chartTotExp" id="chart-container">
+                        <canvas id="TFE_Chart"></canvas>
+                    </div> 
+                </div>
+        
+            {% else %}
+                <p>No organization found</p>
+            {% endif %}
+        </div>
+
+        <script type="text/javascript">
+
+            // Extract data from the organization object
+            var filingsWithData = JSON.parse("{{ filings_with_data_json|escapejs }}");
+            console.log(filingsWithData);
+            var tax_prd_yr = [];
+            var totrevenue = [];
+            var total_fnc_expenses = []
+        
+            // Fills in TotalRevenue + Tax Years arrays
+            for (var i = 0; i < filingsWithData.length; i++) {
+                tax_prd_yr.push(filingsWithData[i].tax_prd_yr);
+                totrevenue.push(filingsWithData[i].totrevenue);
+                total_fnc_expenses.push(filingsWithData[i].totfuncexpns)
+            }
+            tax_prd_yr.reverse()
+            totrevenue.reverse()
+            total_fnc_expenses.reverse()
+        
+            // Total Revenue + Time Chart
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: tax_prd_yr,
+                    datasets: [{
+                        label: 'Total Revenue',
+                        data: totrevenue,
+                        borderWidth: 1
+                    }]
+                }
+            });
+
+            // Total Functional Expenses + Time Chart
+            var ctx = document.getElementById('TFE_Chart').getContext('2d');
+            var TFE_Chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: tax_prd_yr,
+                    datasets: [{
+                        label: 'Total Functional Expenses',
+                        data: total_fnc_expenses,
+                        borderWidth: 1
+                    }]
+                },
+            });
+        </script>
+    </body>
 </html>

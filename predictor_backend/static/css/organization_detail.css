@@ -1,0 +1,56 @@
+.navItems {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+.searchFormInput {
+    margin-right: 10px;
+}
+.orgDetailHeader {
+    text-align: center;
+    margin: 20px auto;
+}
+.orgContainer {
+    height: 500px;
+}
+.orgInfo {
+    background: rgba(0,0,0,.5);
+    border: 2px black solid;
+    height: 300px;
+    width: 450px;
+    padding: 10px;
+    border-radius: 20px;
+    margin: 20px 50px;
+}
+
+.orgName {
+    display: flex;
+}
+.orgTitle {
+    display: flex;
+    background: lightgray;
+    border-radius: 10px 0 0 10px;
+    padding: 5px 20px;
+    width: 25%;
+    font-weight: bold;
+    flex-direction: column;
+    justify-content: center;
+    text-align:center;
+}
+.orgResult {
+    background: white;
+    border-radius: 0 10px 10px 0;
+    padding: 5px 20px;
+    width: 75%;
+}
+
+.chartContainer {
+    width: 500px;
+}
+.chart {
+    border-radius: 20px;
+    padding: 20px;
+    color: white;
+    margin: 20px;
+    border: 2px gray solid;
+}
