@@ -191,3 +191,12 @@ def organization_detail(request):
         return render(request, 'organization_detail.html', {'organization': organization, 'filings_with_data_json': filings_with_data_json})
     else:
         return render(request, 'home.html')
+    
+def random_organization(request):
+    random_organization = collection.aggregate([{ '$sample': { 'size': 1 }}])
+    organization = next(random_organization, None)
+    if organization:
+        filings_with_data_json = json.dumps(organization.get('filings_with_data', []))
+        return render(request, 'organization_detail.html', {'organization': organization, 'filings_with_data_json': filings_with_data_json})
+    else:
+        return render(request, 'home.html')
