@@ -190,4 +190,4 @@ def organization_detail(request):
         filings_with_data_json = json.dumps(organization.get('filings_with_data', []))
         return render(request, 'organization_detail.html', {'organization': organization, 'filings_with_data_json': filings_with_data_json})
     else:
-        return render(request, 'organization_detail.html')
+        return render(request, 'home.html')

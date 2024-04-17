@@ -44,12 +44,15 @@
         </nav>
 
         <div class="orgDetailHeader">
-            <h1 class="display-5">Organization Detail</h1>
+            <h1 class="display-5"></h1>
         </div>
         
-        <div class="orgContainer d-inline-flex justify-content-center w-100">
+        <div class="orgContainer d-inline-flex justify-content-center">
             {% if organization %}
                 <div class="orgInfo">
+                    <div class="orgHeader">
+                        <p class="display-6">NonProfit Info</p>
+                    </div>
                     <div class="orgName">
                         <p class="orgTitle">Name:</p>
                         <p class="orgResult">{{ organization.organization.name }}</p>
@@ -64,16 +67,52 @@
                     </div>
                 </div>
                 
-                <div class="chartContainer d-flex flex-column ">
-                    <!-- Where the revenue graph is -->
-                    <div class="chart chartTotRev" id="chart-container">
-                        <canvas id="myChart"></canvas>
-                    </div> 
-
-                    <!-- Where the total expenses graph is -->
-                    <div class="chart chartTotExp" id="chart-container">
-                        <canvas id="TFE_Chart"></canvas>
-                    </div> 
+                <div class="chartRightSide">
+                    <div class="chartHeader">
+                        <p class="display-6">NonProfit Graphs</p>
+                    </div>
+                    <div class="chartContainer grid-container ">
+                        <!-- Where the revenue graph is -->
+                        <div class="chart chartTotRev grid-item" id="chart-container">
+                            <canvas id="TRevenue_Chart"></canvas>
+                        </div> 
+    
+                        <!-- Where the total expenses graph is -->
+                        <div class="chart chartTotExp grid-item" id="chart-container">
+                            <canvas id="TFE_Chart"></canvas>
+                        </div> 
+                        
+                        <!-- Where the total assets graph is -->
+                        <div class="chart chartTotAss grid-item" id="chart-container">
+                            <canvas id="TAssests_Chart"></canvas>
+                        </div> 
+                        
+                        <!-- Where the total liabilities graph is -->
+                        <div class="chart chartTotAss grid-item" id="chart-container">
+                            <canvas id="TLiabilities_Chart"></canvas>
+                        </div> 
+                        
+                        <!-- Where the total gifts graph is -->
+                        <div class="chart chartTotAss grid-item" id="chart-container">
+                            <canvas id="TGifts_Chart"></canvas>
+                        </div> 
+                        
+                        <!-- Where the total program revenue graph is -->
+                        <div class="chart chartTotAss grid-item" id="chart-container">
+                            <canvas id="TPR_Chart"></canvas>
+                        </div> 
+                        
+                        <!-- Where the total investment income graph is -->
+                        <div class="chart chartTotAss grid-item" id="chart-container">
+                            <canvas id="TII_Chart"></canvas>
+                        </div> 
+    
+                        <!-- Where the total compensation to officiers graph is -->
+                        <div class="chart chartTotAss grid-item" id="chart-container">
+                            <canvas id="TCO_Chart"></canvas>
+                        </div> 
+                        
+                </div>
                 </div>
         
             {% else %}
@@ -88,21 +127,39 @@
             console.log(filingsWithData);
             var tax_prd_yr = [];
             var totrevenue = [];
-            var total_fnc_expenses = []
+            var total_fnc_expenses = [];
+            var total_assets = [];
+            var total_liabilities = [];
+            var total_gifts = [];
+            var total_program_revenue = [];
+            var investment_income = [];
+            var compensation_co = [];
         
             // Fills in TotalRevenue + Tax Years arrays
             for (var i = 0; i < filingsWithData.length; i++) {
                 tax_prd_yr.push(filingsWithData[i].tax_prd_yr);
                 totrevenue.push(filingsWithData[i].totrevenue);
-                total_fnc_expenses.push(filingsWithData[i].totfuncexpns)
+                total_fnc_expenses.push(filingsWithData[i].totfuncexpns);
+                total_assets.push(filingsWithData[i].totassetsend);
+                total_liabilities.push(filingsWithData[i].totliabend);
+                total_gifts.push(filingsWithData[i].totcntrbgfts);
+                total_program_revenue.push(filingsWithData[i].totprgmrevnue);
+                investment_income.push(filingsWithData[i].invstmntinc);
+                compensation_co.push(filingsWithData[i].compnsatncurrofcr);
             }
             tax_prd_yr.reverse()
             totrevenue.reverse()
             total_fnc_expenses.reverse()
-        
+            total_assets.reverse()
+            total_liabilities.reverse()
+            total_gifts.reverse()
+            total_program_revenue.reverse()
+            investment_income.reverse()
+            compensation_co.reverse()
+
             // Total Revenue + Time Chart
-            var ctx = document.getElementById('myChart').getContext('2d');
-            var myChart = new Chart(ctx, {
+            var ctx = document.getElementById('TRevenue_Chart').getContext('2d');
+            var TRevenue_Chart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: tax_prd_yr,
@@ -123,6 +180,90 @@
                     datasets: [{
                         label: 'Total Functional Expenses',
                         data: total_fnc_expenses,
+                        borderWidth: 1
+                    }]
+                },
+            });
+            
+            // Total Assets + Time Chart
+            var ctx = document.getElementById('TAssests_Chart').getContext('2d');
+            var TAssests_Chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: tax_prd_yr,
+                    datasets: [{
+                        label: 'Total Assets',
+                        data: total_assets,
+                        borderWidth: 1
+                    }]
+                },
+            });
+            
+            // Total Liabilities + Time Chart
+            var ctx = document.getElementById('TLiabilities_Chart').getContext('2d');
+            var TLiabilities_Chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: tax_prd_yr,
+                    datasets: [{
+                        label: 'Total Liabilities',
+                        data: total_liabilities,
+                        borderWidth: 1
+                    }]
+                },
+            });
+            
+            // Total Gifts + Time Chart
+            var ctx = document.getElementById('TGifts_Chart').getContext('2d');
+            var TGifts_Chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: tax_prd_yr,
+                    datasets: [{
+                        label: 'Total Gifts',
+                        data: total_gifts,
+                        borderWidth: 1
+                    }]
+                },
+            });
+            
+            // Total Program Revenue + Time Chart
+            var ctx = document.getElementById('TPR_Chart').getContext('2d');
+            var TPR_Chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: tax_prd_yr,
+                    datasets: [{
+                        label: 'Total Program Revenue',
+                        data: total_program_revenue,
+                        borderWidth: 1
+                    }]
+                },
+            });
+            
+            // Total Investment Income + Time Chart
+            var ctx = document.getElementById('TII_Chart').getContext('2d');
+            var TII_Chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: tax_prd_yr,
+                    datasets: [{
+                        label: 'Total Investment Income',
+                        data: investment_income,
+                        borderWidth: 1
+                    }]
+                },
+            });
+            
+            // Total Compensation to Officers + Time Chart
+            var ctx = document.getElementById('TCO_Chart').getContext('2d');
+            var TCO_Chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: tax_prd_yr,
+                    datasets: [{
+                        label: 'Total Compensation to Officers',
+                        data: compensation_co,
                         borderWidth: 1
                     }]
                 },
