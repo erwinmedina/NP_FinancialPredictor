@@ -41,10 +41,10 @@
 # # Optionally, fine-tune the model and make predictions on new data
 
 
-
 import os
 import json
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
@@ -58,51 +58,61 @@ json_file_path = os.path.join(script_dir, 'nonprofit_data.json')
 with open(json_file_path, 'r') as file:
     data = json.load(file)
 
-# Load data from JSON file
-with open('nonprofit_data.json', 'r') as file:
-    data = json.load(file)
-
 # Extract relevant features from JSON data
 def extract_features(filings):
-    features = []
+    features = {
+        "totfuncexpns": [],
+        "totassetsend": [],
+        "totliabend": []
+        # Add more features as needed
+    }
     for filing in filings:
-        feature = {
-            "totrevenue": filing.get("totrevenue", 0),
-            "totfuncexpns": filing.get("totfuncexpns", 0),
-            "totassetsend": filing.get("totassetsend", 0),
-            "totliabend": filing.get("totliabend", 0),
-            # Add more features as needed
-        }
-        features.append(feature)
+        features["totfuncexpns"].append(filing.get("totfuncexpns", np.nan))
+        features["totassetsend"].append(filing.get("totassetsend", np.nan))
+        features["totliabend"].append(filing.get("totliabend", np.nan))
+        # Add more features as needed
     return features
 
+
 # Apply feature extraction function to each row
-data["features"] = [extract_features(entry["filings_with_data"]) for entry in data]
+features_list = [extract_features(entry["filings_with_data"]) for entry in data]
 
-# Create DataFrame
-df = pd.DataFrame(data)
+# Create DataFrame with features
+df = pd.DataFrame(features_list)
 
-# Flatten the features into separate columns
-df = pd.concat([df.drop(['features'], axis=1), df['features'].apply(pd.Series)], axis=1)
+# Check the shape and head of the DataFrame
+print("DataFrame Shape:", df.shape)
+print("DataFrame Head:\n", df.head())
 
-# Perform preprocessing and feature engineering as needed
+# Fill NaN values with zeros
+df.fillna(0, inplace=True)
+
+# Check for missing values
+print("Missing Values:\n", df.isnull().sum())
 
 # Split data into features (X) and target variable (y)
-X = df.drop(columns=["financial_performance_metric", "filings_with_data"])
-y = df["financial_performance_metric"]
+X = df
+y = pd.Series([entry["filings_with_data"]["totrevenue"] for entry in data])  # Assuming totrevenue is the target variable
+
+# Print sample of target variable (y)
+print("Sample of Target Variable (y):\n", y.head())
 
 # Split data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+# Flatten the nested lists in X_train
+X_train_flat = pd.DataFrame({col: np.concatenate(X_train[col].values) for col in X_train.columns})
+
+# Flatten the nested lists in X_test similarly
+X_test_flat = pd.DataFrame({col: np.concatenate(X_test[col].values) for col in X_test.columns})
+
 # Initialize and train linear regression model
 model = LinearRegression()
-model.fit(X_train, y_train)
+model.fit(X_train_flat, y_train)
 
 # Make predictions on test data
-y_pred = model.predict(X_test)
+y_pred = model.predict(X_test_flat)
 
 # Evaluate model performance
 mse = mean_squared_error(y_test, y_pred)
 print("Mean Squared Error:", mse)
-
-# Optionally, fine-tune the model and make predictions on new data
