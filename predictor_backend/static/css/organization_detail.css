@@ -35,7 +35,7 @@
     height: 300px;
     width: 450px;
     border-radius: 20px;
-    margin: 20px 50px;
+    margin: 100px 50px;
 }
 
 .orgName {
@@ -80,6 +80,16 @@
     color: white;
     margin: 20px;
     border: 2px gray solid;
+}
+.predictorCharts {
+    width: 100%;
+}
+.predictedTotalExps {
+    width: 100%;
+}
+.predictorChart {
+    margin: 20px auto;
+    width: 70%;
 }
 
 ::-webkit-scrollbar {

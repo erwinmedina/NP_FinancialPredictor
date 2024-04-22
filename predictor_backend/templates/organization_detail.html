@@ -46,11 +46,8 @@
             </div>
         </nav>
 
-        <div class="orgDetailHeader">
-            <h1 class="display-5"></h1>
-        </div>
         
-        <div class="orgContainer d-inline-flex justify-content-center">
+        <div class="orgContainer my-3 d-inline-flex justify-content-center">
             {% if organization %}
                 <div class="orgInfo">
                     <div class="orgHeader">
@@ -114,8 +111,19 @@
                         <div class="chart chartTotAss grid-item" id="chart-container">
                             <canvas id="TCO_Chart"></canvas>
                         </div> 
-                        
-                </div>
+                        <div class="predictorCharts">
+                            <div class="chartHeader">
+                                <p class="display-6">Predictions</p>
+                            </div>
+                            <div class="chart predictorChart" id="chart-container">
+                                <img class="predictedTotalExps" src="data:image/png;base64,{{ plot_image_expenses }}" alt="Predicted Total Expenses">
+                            </div>
+                            <div class="chart predictorChart" id="chart-container">
+                                <img class="predictedTotalExps" src="data:image/png;base64,{{ plot_image_revenue }}" alt="Predicted Total Expenses">
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
         
             {% else %}
@@ -127,7 +135,6 @@
 
             // Extract data from the organization object
             var filingsWithData = JSON.parse("{{ filings_with_data_json|escapejs }}");
-            console.log(filingsWithData);
             var tax_prd_yr = [];
             var totrevenue = [];
             var total_fnc_expenses = [];

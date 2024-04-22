@@ -5,6 +5,8 @@ import matplotlib
 from dotenv import load_dotenv
 from django.shortcuts import render
 matplotlib.use('Agg')
+from django.http import HttpResponse
+from .predictor import predict_total_expenses, predict_total_revenue
 
 # Handles reading from the DB
 load_dotenv("./.env")
@@ -22,10 +24,17 @@ def organization_detail(request):
     ein = int(request.GET.get('ein'))
     if ein:
         organization = collection.find_one({'organization.ein': ein})
+        plot_image_expenses = predict_total_expenses(ein)
+        plot_image_revenue = predict_total_revenue(ein)
 
         # Convert filings_with_data to JSON
         filings_with_data_json = json.dumps(organization.get('filings_with_data', []))
-        return render(request, 'organization_detail.html', {'organization': organization, 'filings_with_data_json': filings_with_data_json})
+        return render(request, 'organization_detail.html', {
+            'organization': organization, 
+            'filings_with_data_json': filings_with_data_json,
+            'plot_image_expenses': plot_image_expenses,
+            'plot_image_revenue': plot_image_revenue
+            })
     else:
         return render(request, 'home.html')
 
@@ -33,8 +42,15 @@ def organization_detail(request):
 def random_organization(request):
     random_organization = collection.aggregate([{ '$sample': { 'size': 1 }}])
     organization = next(random_organization, None)
+    plot_image_expenses = predict_total_expenses(organization["organization"]["ein"])
+    plot_image_revenue = predict_total_revenue(organization["organization"]["ein"])
     if organization:
         filings_with_data_json = json.dumps(organization.get('filings_with_data', []))
-        return render(request, 'organization_detail.html', {'organization': organization, 'filings_with_data_json': filings_with_data_json})
+        return render(request, 'organization_detail.html', {
+            'organization': organization, 
+            'filings_with_data_json': filings_with_data_json,
+            'plot_image_expenses': plot_image_expenses,
+            'plot_image_revenue': plot_image_revenue
+            })
     else:
         return render(request, 'home.html')
