@@ -77,7 +77,7 @@ def predict_total_revenue(ein):
     predicted_revenue = model.predict(X)
 
     # Calculate coefficients of the line of best fit
-    coefficients = np.polyfit(filing_years, predicted_revenue, 3)
+    coefficients = np.polyfit(filing_years, predicted_revenue, 4)
     line_of_best_fit = np.polyval(coefficients, filing_years)
 
     # Plotting
@@ -179,7 +179,7 @@ def predict_total_expenses(ein):
     predicted_expenses = model.predict(X)
 
     # Calculate coefficients of the line of best fit
-    coefficients = np.polyfit(filing_years, predicted_expenses, 3)
+    coefficients = np.polyfit(filing_years, predicted_expenses, 4)
     line_of_best_fit = np.polyval(coefficients, filing_years)
 
     # Plotting

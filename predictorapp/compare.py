@@ -1,4 +1,6 @@
 import pandas as pd
+import numpy as np
+from sklearn.datasets import load_iris
 import os
 import json
 import matplotlib.pyplot as plt
@@ -32,6 +34,7 @@ def compare_revenue():
 
     # Calculate average revenue_amount per state
     df_average_revenue = df_revenue.groupby('State').mean().reset_index()
+    print(df_average_revenue.to_string())
 
     # GDP per capita data with state abbreviations
     gdp_per_capita = {
