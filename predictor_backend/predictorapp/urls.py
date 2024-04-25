@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.home, name="home"),
     path('organization-detail/', views.organization_detail, name='organization_detail'),
     path('random/', views.random_organization, name='random_organization'),
+    path('comparison-charts/', views.comparison_charts, name="comparison-charts")
 ]
 
 # Serve media files during development

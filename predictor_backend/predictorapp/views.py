@@ -7,6 +7,7 @@ from django.shortcuts import render
 matplotlib.use('Agg')
 from django.http import HttpResponse
 from .predictor import predict_total_expenses, predict_total_revenue
+from .compare import compare_revenue, compare_expense
 
 # Handles reading from the DB
 load_dotenv("./.env")
@@ -54,3 +55,12 @@ def random_organization(request):
             })
     else:
         return render(request, 'home.html')
+    
+# Handles the comparison graphs
+def comparison_charts(request):
+    plot_image_comparison_revenue = compare_revenue()
+    plot_image_comparison_expense = compare_expense()
+    return render(request, "comparison.html", {
+        'plot_image_comparison_revenue': plot_image_comparison_revenue,
+        'plot_image_comparison_expense': plot_image_comparison_expense
+    })
