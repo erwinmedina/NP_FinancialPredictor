@@ -1,8 +1,5 @@
-from django.db import models
 from mongoengine import Document, StringField
 # Create your models here.
-
-from django.db import models
 
 class OrganizationLite(Document):
     name = StringField(max_length=100)
