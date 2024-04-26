@@ -4,6 +4,7 @@
 import os
 import pandas as pd
 import numpy as np
+from django.http import JsonResponse
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.impute import SimpleImputer
@@ -147,8 +148,7 @@ def predict_total_revenue(ein):
     # Encode the plot image as a base64 string
     plot_image_revenue = base64.b64encode(buffer.getvalue()).decode()
 
-    return plot_image_revenue
-
+    return JsonResponse({'plot_image_revenue': plot_image_revenue})
 
 # ********************************************************
 # ----------------TOTFUNCEXPNS PREDICTOR------------------
@@ -249,4 +249,4 @@ def predict_total_expenses(ein):
     # Encode the plot image as a base64 string
     plot_image_expense = base64.b64encode(buffer.getvalue()).decode()
 
-    return plot_image_expense
+    return JsonResponse({'plot_image_expense': plot_image_expense})

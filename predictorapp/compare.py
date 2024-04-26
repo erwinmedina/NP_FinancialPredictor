@@ -1,13 +1,11 @@
 import pandas as pd
-import numpy as np
-from sklearn.datasets import load_iris
 import os
-import json
 import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 import pymongo
 import io
 import base64
+from django.http import JsonResponse
 
 # --------------------------------------------- #
 # THIS HANDLES THE COMPARISON CHART FOR REVENUE #
@@ -19,7 +17,7 @@ def compare_revenue():
     mongo_uri = os.environ.get("MONGODB_URI")
     client = pymongo.MongoClient(mongo_uri)
     db = client.get_database("nonprofit")
-    collection = db.get_collection('organization_10k')
+    collection = db.get_collection('organization')
 
     # Extract revenue_amount and state for each organization
     revenue_data = []
@@ -78,7 +76,7 @@ def compare_revenue():
     # Encode the plot image as a base64 string
     plot_image_compare_revenue = base64.b64encode(buffer.getvalue()).decode()
 
-    return plot_image_compare_revenue
+    return JsonResponse({'plot_image_compare_revenue': plot_image_compare_revenue})
 
 
 # ---------------------------------------------- #
@@ -90,7 +88,7 @@ def compare_expense():
     mongo_uri = os.environ.get("MONGODB_URI")
     client = pymongo.MongoClient(mongo_uri)
     db = client.get_database("nonprofit")
-    collection = db.get_collection('organization_10k')
+    collection = db.get_collection('organization')
 
     expense_data = []
     expense_amount = []
@@ -162,4 +160,4 @@ def compare_expense():
     # Encode the plot image as a base64 string
     plot_image_compare_expense = base64.b64encode(buffer.getvalue()).decode()
 
-    return plot_image_compare_expense
+    return JsonResponse({'plot_image_compare_expense': plot_image_compare_expense})
