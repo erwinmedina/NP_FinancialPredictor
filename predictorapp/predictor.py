@@ -114,7 +114,6 @@ def predict_total_revenue(ein):
     plt.title('Predicted Total Revenue')
     plt.legend()
     plt.grid()
-    plt.show()
 
 
 
