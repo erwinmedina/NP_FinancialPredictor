@@ -9,7 +9,7 @@
 | Name | Email |
 | ---- | ----- |
 | Erwin Medina | erwinmedina@csu.fullerton.edu |
-| Indrajeet Patwardhan | <your email> |
+| Indrajeet Patwardhan | Indrajeet2002@csu.fullerton.edu |
 
 # About 
 This project focuses on analyzing accessible data from nonprofit organizations and assessing their financial stability. We are focusing on retrieving, cleaning, and visualizing the data while also having a focus on big data. 
