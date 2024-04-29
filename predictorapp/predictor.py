@@ -1,20 +1,20 @@
-# ********************************************************
-# -----------------TOTREVENUE PREDICTOR-------------------
-# ********************************************************
+import io
 import os
+import pymongo
+import base64
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from django.http import JsonResponse
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.impute import SimpleImputer
-import matplotlib.pyplot as plt
 from dotenv import load_dotenv
-import pymongo
-import io
-import base64
 from sklearn.preprocessing import PolynomialFeatures
 
+# ********************************************************
+# -----------------TOTREVENUE PREDICTOR-------------------
+# ********************************************************
 def predict_total_revenue(ein):
 
     load_dotenv("./.env")

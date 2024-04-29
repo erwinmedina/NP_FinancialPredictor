@@ -1,10 +1,10 @@
-import pandas as pd
 import os
+import io
+import pymongo
+import base64
+import pandas as pd
 import matplotlib.pyplot as plt
 from dotenv import load_dotenv
-import pymongo
-import io
-import base64
 from django.http import JsonResponse
 
 # --------------------------------------------- #
@@ -17,7 +17,7 @@ def compare_revenue():
     mongo_uri = os.environ.get("MONGODB_URI")
     client = pymongo.MongoClient(mongo_uri)
     db = client.get_database("nonprofit")
-    collection = db.get_collection('organization')
+    collection = db.get_collection('organization_10k')
 
     # Extract revenue_amount and state for each organization
     revenue_data = []
@@ -61,11 +61,11 @@ def compare_revenue():
     plt.figure(figsize=(12, 8))
     plt.bar(df_merged['State'], df_merged['Normalized Revenue'], color='skyblue')
     plt.xlabel('State')
-    plt.ylabel('Normalized Revenue')
+    plt.ylabel('Normalized Revenue ($)')
     plt.title('Normalized Revenue by State')
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.grid(True)
+    plt.grid()
 
     # Save the plot to a BytesIO object
     buffer = io.BytesIO()
@@ -88,7 +88,7 @@ def compare_expense():
     mongo_uri = os.environ.get("MONGODB_URI")
     client = pymongo.MongoClient(mongo_uri)
     db = client.get_database("nonprofit")
-    collection = db.get_collection('organization')
+    collection = db.get_collection('organization_10k')
 
     expense_data = []
     expense_amount = []
@@ -145,11 +145,11 @@ def compare_expense():
     plt.figure(figsize=(12, 8))
     plt.bar(df_merged['State'], df_merged['Normalized Expense'], color='skyblue')
     plt.xlabel('State')
-    plt.ylabel('Normalized Expenses')
+    plt.ylabel('Normalized Expenses ($)')
     plt.title('Normalized Expenses by State')
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.grid(True)
+    plt.grid()
 
     # Save the plot to a BytesIO object
     buffer = io.BytesIO()

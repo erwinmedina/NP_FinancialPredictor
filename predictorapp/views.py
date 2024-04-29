@@ -4,9 +4,9 @@ import json
 import matplotlib
 from dotenv import load_dotenv
 from django.shortcuts import render
-matplotlib.use('Agg')
 from .predictor import predict_total_expenses, predict_total_revenue
 from .compare import compare_revenue, compare_expense
+matplotlib.use('Agg')
 
 # Handles reading from the DB
 load_dotenv("./.env")

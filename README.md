@@ -11,10 +11,22 @@
 | Erwin Medina | erwinmedina@csu.fullerton.edu |
 | Indrajeet Patwardhan | Indrajeet2002@csu.fullerton.edu |
 
-# About 
+# About:
 This project focuses on analyzing accessible data from nonprofit organizations and assessing their financial stability. We are focusing on retrieving, cleaning, and visualizing the data while also having a focus on big data. 
 
-# Languages / Frameworks
+# Getting Started:
+- Clone the repository.
+    - `git clone https://github.com/erwinmedina/NP_FinancialPredictor.git`
+- Navigate to the project directory on your local machine.
+    - `cd <project_directory>`
+- Install all dependencies using Pip (ensure you have Pip installed).
+    - `pip install -r requirements.txt`
+- Run the project. 
+    - `python manage.py runserver`
+- Questions / Concerns?
+    - `Free to email either of us.`
+
+# Languages / Frameworks:
 - Python
     - Pandas (Graphs)
     - Random Forest Regression (ML)
@@ -22,7 +34,7 @@ This project focuses on analyzing accessible data from nonprofit organizations a
 - Django
 - HTML/CSS/Javascript
 
-# Images
+# Images:
 
 | Page | Output |
 | ---- | ------ |
