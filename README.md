@@ -24,7 +24,7 @@ This project focuses on analyzing accessible data from nonprofit organizations a
 - Run the project. 
     - `python manage.py runserver`
 - Questions / Concerns?
-    - `Free to email either of us.`
+    - `Feel free to email either of us.`
 
 # Languages / Frameworks:
 - Python
