@@ -2,6 +2,10 @@ import os
 import pymongo
 from dotenv import load_dotenv
 
+# *************************************************************** #
+# Created a new database that only contains EIN and Company Name. #
+# *************************************************************** #
+
 load_dotenv("./.env")
 mongo_uri = os.environ.get("MONGODB_URI")
 print(mongo_uri)

@@ -3,6 +3,10 @@ import pymongo
 import json
 from dotenv import load_dotenv
 
+# ******************************************************************* #
+# This script inserts all of our json organizations into the database #
+# ******************************************************************* #
+
 load_dotenv("./.env")
 mongo_uri = os.environ.get("MONGODB_URI")
 print(mongo_uri)

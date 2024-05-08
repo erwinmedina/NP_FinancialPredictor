@@ -17,6 +17,7 @@ from sklearn.preprocessing import PolynomialFeatures
 # ********************************************************
 def predict_total_revenue(ein):
 
+    # Handles reading from the database
     load_dotenv("./.env")
     mongo_uri = os.environ.get("MONGODB_URI")
     client = pymongo.MongoClient(mongo_uri)
@@ -55,16 +56,11 @@ def predict_total_revenue(ein):
         features_list.append(features)
         filing_years.append(filing.get("tax_prd_yr", np.nan))
 
-    # Create DataFrame with features
     df = pd.DataFrame(features_list)
+    df.replace(['', '  '], np.nan, inplace=True) # Convert non-numeric values to NaN
+    df = df.apply(pd.to_numeric, errors='coerce') # Converts all data to numeric for next step
 
-    # Convert non-numeric values to NaN
-    df.replace(['', '  '], np.nan, inplace=True)
-
-    # Convert all data to numeric type
-    df = df.apply(pd.to_numeric, errors='coerce')
-
-    # Impute missing values with median
+    # Replace missing values with median
     imputer = SimpleImputer(strategy='median')
     df_imputed = pd.DataFrame(imputer.fit_transform(df), columns=df.columns)
 
@@ -72,19 +68,16 @@ def predict_total_revenue(ein):
     X = df_imputed.drop(columns=["totrevenue"])  # Features
     y = df_imputed["totrevenue"]  # Target variable
 
-    # Initialize and train Random Forest Regressor model
-    model = RandomForestRegressor(n_estimators=100, random_state=42)
-    model.fit(X, y)
+    model = RandomForestRegressor(n_estimators=100, random_state=42) # Initialize Random Forest Regressor model
+    model.fit(X, y) # Trains the model [where X is training data; y is corresponding target values]
 
     # Predict revenue for each entry in the dataset
     predicted_revenue = model.predict(X)
     years_df = pd.DataFrame(filing_years, columns=['Year'])
 
-    # Initialize Linear Regression and Fit With Data
+    # Initialize Linear Regression; Line of Best Fit
     linear_regressor = LinearRegression()
     linear_regressor.fit(years_df, predicted_revenue)
-
-    # Get the line of best fit
     line_of_best_fit = linear_regressor.predict(years_df)
 
     plt.figure(figsize=(10, 6))
@@ -92,14 +85,13 @@ def predict_total_revenue(ein):
     plt.plot(filing_years, line_of_best_fit, label='Line of Best Fit')
     plt.plot(filing_years, predicted_revenue, 'ro-', label="Predicted Revenue")
 
-    # Extend x-axis range for future predictions
-    future_years = np.arange(min(filing_years), max(filing_years) + 3)  # Assuming 1 entry per year
-
-    # Initialize polynomial features to create a polynomial graph
+    # Initialize polynomial features to create a polynomial prediction graph
+    future_years = np.arange(min(filing_years), max(filing_years) + 3) # Extends graph by 3 years for future prediction
     poly_features = PolynomialFeatures(degree=4)
     years_poly = poly_features.fit_transform(years_df)
     future_years_poly = poly_features.fit_transform(pd.DataFrame(future_years, columns=['Year']))
 
+    # Initialize linear regression for future years
     linear_regressor_future = LinearRegression()
     linear_regressor_future.fit(years_poly, predicted_revenue)
     future_predicted_revenue = linear_regressor_future.predict(future_years_poly)
@@ -127,6 +119,7 @@ def predict_total_revenue(ein):
 # ********************************************************
 def predict_total_expenses(ein):
 
+    # Handles reading from the database
     load_dotenv("./.env")
     mongo_uri = os.environ.get("MONGODB_URI")
     client = pymongo.MongoClient(mongo_uri)
@@ -165,16 +158,11 @@ def predict_total_expenses(ein):
         features_list.append(features)
         filing_years.append(filing.get("tax_prd_yr", np.nan))
 
-    # Create DataFrame with features
     df = pd.DataFrame(features_list)
+    df.replace(['', '  '], np.nan, inplace=True) # Convert non-numeric values to NaN
+    df = df.apply(pd.to_numeric, errors='coerce') # Convert all data to numeric type
 
-    # Convert non-numeric values to NaN
-    df.replace(['', '  '], np.nan, inplace=True)
-
-    # Convert all data to numeric type
-    df = df.apply(pd.to_numeric, errors='coerce')
-
-    # Impute missing values with median
+    # Replace missing values with median
     imputer = SimpleImputer(strategy='median')
     df_imputed = pd.DataFrame(imputer.fit_transform(df), columns=df.columns)
 
@@ -182,19 +170,16 @@ def predict_total_expenses(ein):
     X = df_imputed.drop(columns=["totfuncexpns"])  # Features
     y = df_imputed["totfuncexpns"]  # Target variable
 
-    # Initialize and train Random Forest Regressor model
-    model = RandomForestRegressor(n_estimators=100, random_state=42)
-    model.fit(X, y)
+    model = RandomForestRegressor(n_estimators=100, random_state=42) # Initialize Random Forest Regressor model
+    model.fit(X, y) # Trains the model [where X is training data; y is corresponding target values]
 
     # Predict revenue for each entry in the dataset
     predicted_expenses = model.predict(X)
     years_df = pd.DataFrame(filing_years, columns=['Year'])
 
-    # Initialize Linear Regression + Fit with Data
+    # Initialize Linear Regression + Line of Best Fit
     linear_regressor = LinearRegression()
     linear_regressor.fit(years_df, predicted_expenses)
-
-    # Get the line of best fit
     line_of_best_fit = linear_regressor.predict(years_df)
 
     # Plotting
@@ -202,15 +187,14 @@ def predict_total_expenses(ein):
     plt.plot(filing_years, df["totfuncexpns"], label="Actual Expenses")
     plt.plot(filing_years, line_of_best_fit, label="Line of Best Fit")
     plt.plot(filing_years, predicted_expenses, 'ro-', label="Predicted Expenses")
-
-    # Extend x-axis range for future predictions
-    future_years = np.arange(min(filing_years), max(filing_years) + 3)  # Assuming 1 entry per year
     
     # Initialize polynomial features to create a polynomial graph
+    future_years = np.arange(min(filing_years), max(filing_years) + 3)
     poly_features = PolynomialFeatures(degree=4)
     years_poly = poly_features.fit_transform(years_df)
     future_years_poly = poly_features.fit_transform(pd.DataFrame(future_years, columns=["Year"]))
 
+    # Initialize linear regression for future years
     linear_regressor_future = LinearRegression()
     linear_regressor_future.fit(years_poly, predicted_expenses)
     future_predicted_expenses = linear_regressor_future.predict(future_years_poly)

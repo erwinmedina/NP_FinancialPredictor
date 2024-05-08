@@ -2,6 +2,10 @@ import os
 import pymongo
 from dotenv import load_dotenv
 
+# ********************************************************************************************* #
+# This script simply removes extra data from our objects in database. Only needs to be ran once #
+# ********************************************************************************************* #
+
 load_dotenv("./.env")
 mongo_uri = os.environ.get("MONGODB_URI")
 print(mongo_uri)

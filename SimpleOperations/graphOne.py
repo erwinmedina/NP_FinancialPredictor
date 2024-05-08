@@ -4,6 +4,10 @@ import pandas as pd
 import pymongo
 from dotenv import load_dotenv
 
+# ************************************************* #
+# This script was a test on how we'd model the data #
+# ************************************************* #
+
 load_dotenv("./.env")
 mongo_uri = os.environ.get("MONGODB_URI")
 print(mongo_uri)

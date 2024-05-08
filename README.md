@@ -21,6 +21,7 @@ This project focuses on analyzing accessible data from nonprofit organizations a
     - `cd <project_directory>`
 - Install all dependencies using Pip (ensure you have Pip installed).
     - `pip install -r requirements.txt`
+- Ask creators for .env file info
 - Run the project. 
     - `python manage.py runserver`
 - Questions / Concerns?

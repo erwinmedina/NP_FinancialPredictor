@@ -27,14 +27,12 @@ def compare_revenue():
         revenue_amount = entry["organization"]["revenue_amount"]
         revenue_data.append({"State": state, "Revenue Amount": revenue_amount})
 
-    # Convert data to DataFrame
-    df_revenue = pd.DataFrame(revenue_data)
-
     # Calculate average revenue_amount per state
+    df_revenue = pd.DataFrame(revenue_data)
     df_average_revenue = df_revenue.groupby('State').mean().reset_index()
     print(df_average_revenue.to_string())
 
-    # GDP per capita data with state abbreviations
+    # GDP per capita data (in US dollars) with state abbreviations
     gdp_per_capita = {
         'State': ['NY', 'VA', 'NC', 'MA', 'NH', 'TN', 'AK', 'PA', 'MI', 'CT', 'IA', 'MO', 'CA', 'KS', 'NM', 'ND', 
                 'SD', 'AZ', 'WA', 'WI', 'FL', 'WY', 'OH', 'ME', 'DE', 'OR', 'MT', 'NJ', 'RI', 'KY', 'MD', 'UT', 
@@ -45,16 +43,12 @@ def compare_revenue():
                             43052, 66413, 51456, 42356, 66023, 50996, 42173, 62263, 50827, 41659,
                             60886, 49740, 40279, 59980, 49663, 39883, 59057, 49606, 39843, 59057,
                             48954, 39495, 58417, 48738, 38467, 58141, 48189, 34029, 56880, 47921,
-                            176534]  # GDP per capita in dollars
+                            176534]
     }
 
-    # Convert GDP per capita data to DataFrame
+    # Merge DataFrames on 'State' and then normalize
     df_gdp_per_capita = pd.DataFrame(gdp_per_capita)
-
-    # Merge DataFrames on 'State'
     df_merged = pd.merge(df_average_revenue, df_gdp_per_capita, left_on='State', right_on='State')
-
-    # Normalize average revenue with GDP per capita
     df_merged['Normalized Revenue'] = df_merged['Revenue Amount'] / df_merged['GDP per Capita']
 
     # Plotting
@@ -83,6 +77,7 @@ def compare_revenue():
 # THIS HANDLES THE COMPARISON CHART FOR EXPENSES #
 # ---------------------------------------------- #
 def compare_expense():
+
    # Handles reading from the DB
     load_dotenv("./.env")
     mongo_uri = os.environ.get("MONGODB_URI")
@@ -97,28 +92,26 @@ def compare_expense():
 
     # Iterate over each organization
     for organization in data:
-        # Extract organization information
-        org_state = organization['organization']['state']        
 
-        # Extract totfuncexpns for each filing and calculate average
+        org_state = organization['organization']['state']        
         totfuncexpns_list = []
+
+        # Iterate over each tax filing for an organization
         for filing in organization['filings_with_data']:
             totfuncexpns_list.append(filing['totfuncexpns'])
         
-        # Calculate average totfuncexpns
+        # Average totfuncexpns for all filings for an organization
         average_totfuncexpns = sum(totfuncexpns_list) / len(totfuncexpns_list) if totfuncexpns_list else 0
         expense_amount.append(average_totfuncexpns)
 
         expense_data.append({"State": org_state, "Expense Amount": expense_amount[counter]})
         counter += 1
 
-    # Convert data to DataFrame
-    df_expense = pd.DataFrame(expense_data)
-
     # Calculate average revenue_amount per state
+    df_expense = pd.DataFrame(expense_data)
     df_average_expense = df_expense.groupby('State').mean().reset_index()
 
-    # GDP per capita data with state abbreviations
+    # GDP per capita data (in US dollars) with state abbreviations
     gdp_per_capita = {
         'State': ['NY', 'VA', 'NC', 'MA', 'NH', 'TN', 'AK', 'PA', 'MI', 'CT', 'IA', 'MO', 'CA', 'KS', 'NM', 'ND', 
                 'SD', 'AZ', 'WA', 'WI', 'FL', 'WY', 'OH', 'ME', 'DE', 'OR', 'MT', 'NJ', 'RI', 'KY', 'MD', 'UT', 
@@ -129,16 +122,12 @@ def compare_expense():
                             43052, 66413, 51456, 42356, 66023, 50996, 42173, 62263, 50827, 41659,
                             60886, 49740, 40279, 59980, 49663, 39883, 59057, 49606, 39843, 59057,
                             48954, 39495, 58417, 48738, 38467, 58141, 48189, 34029, 56880, 47921,
-                            176534]  # GDP per capita in dollars
+                            176534] 
     }
 
-    # Convert GDP per capita data to DataFrame
+    # Merge DataFrames on 'State' & creates normalization
     df_gdp_per_capita = pd.DataFrame(gdp_per_capita)
-
-    # Merge DataFrames on 'State'
     df_merged = pd.merge(df_average_expense, df_gdp_per_capita, left_on='State', right_on='State')
-
-    # Normalize average revenue with GDP per capita
     df_merged['Normalized Expense'] = df_merged['Expense Amount'] / df_merged['GDP per Capita']
 
     # Plotting
